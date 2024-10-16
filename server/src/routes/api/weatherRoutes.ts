@@ -6,6 +6,9 @@ const router = Router();
 
 // TODO: POST Request with city name to retrieve weather data
 router.post('/', (req, res) => {
+  const cityName = req.params.city;
+  
+
   // TODO: GET weather data from city name
   // TODO: save city to search history
 });
