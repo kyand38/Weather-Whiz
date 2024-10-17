@@ -1,3 +1,4 @@
+import { error } from 'console';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -24,16 +25,13 @@ class Weather {
 // TODO: Complete the WeatherService class
 class WeatherService {
   // TODO: Define the baseURL, API key, and city name properties
-  private baseUrl?: string = 'https://api.openweathermap.org/data/2.5'; //weather?q={city name}&appid={API key}
-
+  private baseUrl?: string = ''; //weather?q={city name}&appid={API key}
   private apiKey?: string = '';
-
-   let city: string = '';
+  private city: string = '';
 
   constructor() {
     this.baseUrl = process.env.API_BASE_URL || '';
     this.apiKey = process.env.API_KEY || '';
-    this.city = city;
   }
 
 
@@ -41,15 +39,16 @@ class WeatherService {
   private async fetchLocationData(query: string) {
     try {
       const response = await fetch(
-        `${this.baseUrl}/weather?=${city}&appid=${apiKey}`
+        `${this.baseUrl}weather?q=${this.city}&appid=${this.apiKey}`
       );
-      const cities = await response.json;
-      
-
+      const locationData = await response.json();
+      return locationData;
     }
+  catch (error) {
+    console.error('Error fetching location data.')
+    } 
   }
-
-
+  
   // TODO: Create destructureLocationData method
   //private destructureLocationData(locationData: Coordinates): Coordinates {}
 

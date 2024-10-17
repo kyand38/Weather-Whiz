@@ -10,7 +10,11 @@ router.post('/', (req, res) => {
 
 
   // TODO: GET weather data from city name
+
+
   // TODO: save city to search history
+
+  
 });
 
 // TODO: GET search history
