@@ -26,7 +26,7 @@ class Weather {
 // TODO: Complete the WeatherService class
 class WeatherService {
   // TODO: Define the baseURL, API key, and city name properties
-  private baseUrl?: string = ''; 
+  private baseUrl?: string = '';
   private apiKey?: string = '';
   private city: string = '';
 
@@ -46,31 +46,49 @@ class WeatherService {
       const locationData = await response.json();
       return locationData;
     }
-  catch (error) {
-    console.error('Error fetching location data.')
-    } 
+    catch (error) {
+      console.error('Error fetching location data.')
+    }
   }
-  
+
   // TODO: Create destructureLocationData method
   private destructureLocationData(locationData: Coordinates): Coordinates {
     return {
       lat: locationData.coord.lat,
-      lon: locationData.coord.lon 
-
+      lon: locationData.coord.lon
     };
   }
 
 
   // TODO: Create buildGeocodeQuery method
-    private buildGeocodeQuery(): string {}
+  private buildGeocodeQuery(): string {
+    return `weather?q=${this.city}&appid=${this.apiKey}`;
+  }
 
 
   // TODO: Create buildWeatherQuery method
-  //private buildWeatherQuery(coordinates: Coordinates): string {}
+  private buildWeatherQuery(coordinates: Coordinates): string {
+    return `forecast?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${this.apiKey}`;
+  }
 
 
   // TODO: Create fetchAndDestructureLocationData method
-  //private async fetchAndDestructureLocationData() {}
+  private async fetchAndDestructureLocationData(): Promise<Coordinates | string> {
+    try {
+      const locationData = await this.fetchLocationData(this.city);
+
+      if (!locationData || !locationData.coord) {
+        return 'Invalid location data structure';
+      }
+
+      const coordinates = this.destructureLocationData(locationData);
+      return coordinates;
+    } catch (err: any) {
+      throw new Error(`Error fetching and destructuring location data: ${err}`);
+    }
+  }
+
+
   // TODO: Create fetchWeatherData method
   // private async fetchWeatherData(coordinates: Coordinates) {}
   // TODO: Build parseCurrentWeather method
