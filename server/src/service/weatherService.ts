@@ -10,16 +10,16 @@ interface Coordinates {
 // TODO: Define a class for the Weather object
 class Weather {
   temperature: number;
-  windSpeed: number;
+  wind: number;
   humidity: number;
 
   constructor(
     temperature: number,
-    windSpeed: number,
+    wind: number,
     humidity: number
   ) {
     this.temperature = temperature;
-    this.windSpeed = windSpeed;
+    this.wind = wind;
     this.humidity = humidity;
   }
 }
@@ -94,11 +94,11 @@ class WeatherService {
     try {
       const query = this.buildWeatherQuery(coordinates);
       const response = await fetch(`${this.baseUrl}${query}`);
-      
+
       if (!response.ok) {
         throw new Error(`Error fetching weather data: ${response.statusText}`);
       }
-      
+
       const weatherData = await response.json();
       return weatherData;
     } catch (err: any) {
@@ -109,7 +109,22 @@ class WeatherService {
 
 
   // TODO: Build parseCurrentWeather method
-    private parseCurrentWeather(response: any) {}
+  private parseCurrentWeather(response: any): Weather {
+   
+    const temperature = response.main?.temp;
+
+    const wind = response.wind?.speed;
+
+    const humidity = response.main?.humidity;
+
+    if (temperature === undefined || wind === undefined || humidity === undefined) {
+      throw new Error("Incomplete weather data");
+    }
+
+    const currentWeather = new Weather(temperature, wind, humidity);
+
+    return currentWeather;
+  }
 
 
 
