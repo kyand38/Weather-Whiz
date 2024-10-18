@@ -41,7 +41,7 @@ class WeatherService {
   private async fetchLocationData(query: string) {
     try {
       const response = await fetch(
-        `${this.baseUrl}weather?q=${this.city}&appid=${this.apiKey}`
+        `${this.baseUrl}forecast?q=${this.city}&appid=${this.apiKey}`
       );
       const locationData = await response.json();
       return locationData;
@@ -54,21 +54,21 @@ class WeatherService {
   // TODO: Create destructureLocationData method
   private destructureLocationData(locationData: Coordinates): Coordinates {
     return {
-      lat: locationData.coord.lat,
-      lon: locationData.coord.lon
+      lat: locationData.lat,
+      lon: locationData.lon
     };
   }
 
 
   // TODO: Create buildGeocodeQuery method
   private buildGeocodeQuery(): string {
-    return `weather?q=${this.city}&appid=${this.apiKey}`;
+    return `forecast?q=${this.city}&appid=${this.apiKey}`;
   }
 
 
   // TODO: Create buildWeatherQuery method
   private buildWeatherQuery(coordinates: Coordinates): string {
-    return `forecast?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${this.apiKey}`;
+    return `weather?q=${this.city}&appid=${this.apiKey}`;
   }
 
 
@@ -84,19 +84,45 @@ class WeatherService {
       const coordinates = this.destructureLocationData(locationData);
       return coordinates;
     } catch (err: any) {
-      throw new Error(`Error fetching and destructuring location data: ${err}`);
+      throw new Error(`Error fetching and destructuring location data`);
     }
   }
 
 
   // TODO: Create fetchWeatherData method
-  // private async fetchWeatherData(coordinates: Coordinates) {}
+  private async fetchWeatherData(coordinates: Coordinates): Promise<any> {
+    try {
+      const query = this.buildWeatherQuery(coordinates);
+      const response = await fetch(`${this.baseUrl}${query}`);
+      
+      if (!response.ok) {
+        throw new Error(`Error fetching weather data: ${response.statusText}`);
+      }
+      
+      const weatherData = await response.json();
+      return weatherData;
+    } catch (err: any) {
+      throw new Error(`Error fetching weather data: ${err.message}`);
+    }
+  }
+
+
+
   // TODO: Build parseCurrentWeather method
-  // private parseCurrentWeather(response: any) {}
+    private parseCurrentWeather(response: any) {}
+
+
+
   // TODO: Complete buildForecastArray method
   // private buildForecastArray(currentWeather: Weather, weatherData: any[]) {}
+
+
+
   // TODO: Complete getWeatherForCity method
   // async getWeatherForCity(city: string) {}
+
+
+
 }
 
 export default new WeatherService();
