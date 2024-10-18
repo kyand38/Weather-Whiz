@@ -4,7 +4,8 @@ dotenv.config();
 
 // TODO: Define an interface for the Coordinates object
 interface Coordinates {
-  cityName: string,
+  lat: number;
+  lon: number;
 }
 // TODO: Define a class for the Weather object
 class Weather {
@@ -25,13 +26,14 @@ class Weather {
 // TODO: Complete the WeatherService class
 class WeatherService {
   // TODO: Define the baseURL, API key, and city name properties
-  private baseUrl?: string = ''; //weather?q={city name}&appid={API key}
+  private baseUrl?: string = ''; 
   private apiKey?: string = '';
   private city: string = '';
 
   constructor() {
     this.baseUrl = process.env.API_BASE_URL || '';
     this.apiKey = process.env.API_KEY || '';
+    this.city = '';
   }
 
 
@@ -50,11 +52,17 @@ class WeatherService {
   }
   
   // TODO: Create destructureLocationData method
-  //private destructureLocationData(locationData: Coordinates): Coordinates {}
+  private destructureLocationData(locationData: Coordinates): Coordinates {
+    return {
+      lat: locationData.coord.lat,
+      lon: locationData.coord.lon 
+
+    };
+  }
 
 
   // TODO: Create buildGeocodeQuery method
-  //private buildGeocodeQuery(): string {}
+    private buildGeocodeQuery(): string {}
 
 
   // TODO: Create buildWeatherQuery method
